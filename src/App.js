@@ -113,10 +113,10 @@ function App() {
           </Engine>
       <div class="chat">
   <div class="chat-title">
-    <h1>Fabio Ottaviani</h1>
-    <h2>Supah</h2>
+    <h1>Crypto Funk Maniac</h1>
+    <h2>Level 2</h2>
     <figure class="avatar">
-      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>
+      <img src="https://lh3.googleusercontent.com/Zau-70Ga57u021g4xxx9UqHyiwwpxuFI-W1q0BWetxhmhm8_rTERCPsCfQled_nxBDIN40U7x1hDX3CvVkMeLe4Pxg=w600" /></figure>
       
   </div>
   <div class="messages">
