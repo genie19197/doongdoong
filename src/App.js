@@ -1,7 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
+import './ChatCss.css';
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder, SceneLoader, Color3 } from "@babylonjs/core";
-import { useState} from 'react';
+import { useState, useEffect } from 'react';
 import SceneComponent from "./SceneComponent";
 import { Engine, Scene } from 'react-babylonjs'
 // import 'babylonjs-loaders';
@@ -64,37 +64,72 @@ const onRender = (scene) => {
 
 
 
+const M = 100000;
 function App() {
   const [NFTUrls, setNFTUrls] = useState([gltfPath, 'https://storage.opensea.io/files/d3869b058e297fa014862a254fcccf02.gltf', 'https://storage.opensea.io/files/abb866f89bfb78f2cc7dd52406027e10.gltf']);
+  const [minutes, setMinutes] = useState(M);
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      if (parseInt(seconds) > 0) {
+        setSeconds(parseInt(seconds) - 1);
+      }
+      if (parseInt(seconds) === 0) {
+        if (parseInt(minutes) === 0) {
+          clearInterval(countdown);
+        } else {
+          setMinutes(parseInt(minutes) - 1);
+          setSeconds(600);
+        }
+      }
+    }, 10);
+    return () => clearInterval(countdown);
+  }, [minutes, seconds]);
   return (
     <div>
       <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
       {/* <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" /> */}
-      
-
-          <Engine antialias={true} adaptToDeviceRatio={true} canvasId="sample-canvas">
+      <Engine antialias={true} adaptToDeviceRatio={true} canvasId="sample-canvas">
             <Scene>
               <arcRotateCamera name="camera1" alpha={Math.PI / 2} beta={Math.PI / 2} radius={9.0} target={Vector3.Zero()} minZ={0.001} />
               <hemisphericLight name="light1" intensity={0.7} direction={Vector3.Up()} />
-              {/* <ScaledModelWithProgress rootUrl={`https://storage.opensea.io/files/`} sceneFilename="e085da0987a623f329d9587723a12b8d.gltf" scaleTo={1} 
-                progressBarColor={Color3.FromInts(255, 165, 0)} center={new Vector3(-2.5, 0, 0)}
-              /> */}
               {
                 NFTUrls.map((url, index) => {
                   const separatorIndex = url.lastIndexOf('/');
                   const rootUrl = url.slice(0,separatorIndex + 1); // get until last '/'
                   const filename = url.slice(separatorIndex + 1);
+                  const x = -2 + index + seconds * 0.005;
+                  const y = index; //+ seconds * 0.005;
+                  const z = seconds * 0.005;
                   return <ScaledModelWithProgress rootUrl={rootUrl} sceneFilename={filename} scaleTo={1} 
-progressBarColor={Color3.FromInts(255, 165, 0)} center={new Vector3(index, index , 0)}
+                          progressBarColor={Color3.FromInts(255, 165, 0)} 
+                          center={new Vector3(x,  y, z)}
               />;
-                  
                 })
               }
               
             </Scene>
           </Engine>
-      {/* <input /> */}
-      {/* <button onClick={()=>{}}>SHOW</button> */}
+      <div class="chat">
+  <div class="chat-title">
+    <h1>Fabio Ottaviani</h1>
+    <h2>Supah</h2>
+    <figure class="avatar">
+      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/156381/profile/profile-80.jpg" /></figure>
+      
+  </div>
+  <div class="messages">
+    
+    <div class="messages-content"></div>
+  </div>
+  <div class="message-box">
+    <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
+    <button type="submit" class="message-submit">Send</button>
+  </div>
+
+</div>
+<div class="bg"></div>
     </div>
   );
 }
