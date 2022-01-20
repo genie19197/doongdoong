@@ -7,6 +7,10 @@ import { Engine, Scene } from 'react-babylonjs'
 // import 'babylonjs-loaders';
 import '@babylonjs/loaders';
 import ScaledModelWithProgress from './ScaledModelWithProgress';
+
+import axios from 'axios';
+const chatUrl = 'https://net-provider.herokuapp.com/chat';
+const nickname = `CRYPTO FUNK MANIAC - ${parseInt(Math.random()*10000)}`
 let box;
 const gltfPath = 'https://storage.opensea.io/files/e085da0987a623f329d9587723a12b8d.gltf';
 
@@ -69,6 +73,9 @@ function App() {
   const [NFTUrls, setNFTUrls] = useState([gltfPath, 'https://storage.opensea.io/files/d3869b058e297fa014862a254fcccf02.gltf', 'https://storage.opensea.io/files/abb866f89bfb78f2cc7dd52406027e10.gltf']);
   const [minutes, setMinutes] = useState(M);
   const [seconds, setSeconds] = useState(0);
+  const [textValue, setTextValue] = useState('');
+  const [chatSecond, setChatSecond] = useState(M);
+  const [chatHistory, setChatHistory] = useState([{nickname: 'MASTER', content:'HELLO'}]);
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -86,6 +93,24 @@ function App() {
     }, 10);
     return () => clearInterval(countdown);
   }, [minutes, seconds]);
+
+  useEffect(() => {
+    
+      axios.get(chatUrl).then((value) => {
+        setChatHistory(value.data);
+        // value.data
+      })
+    const countdown = setInterval(() => {
+      if (parseInt(chatSecond) > 0) {
+        setChatSecond(parseInt(chatSecond) - 1);
+      }
+      if (parseInt(chatSecond) === 0) {
+        setChatSecond(M);
+      }
+    }, 1000);
+    return () => clearInterval(countdown);
+  }, [chatSecond]);
+  
   return (
     <div>
       <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
@@ -113,19 +138,40 @@ function App() {
           </Engine>
       <div class="chat">
   <div class="chat-title">
-    <h1>Crypto Funk Maniac</h1>
+    <h1>{nickname}</h1>
     <h2>Level 2</h2>
     <figure class="avatar">
       <img src="https://lh3.googleusercontent.com/Zau-70Ga57u021g4xxx9UqHyiwwpxuFI-W1q0BWetxhmhm8_rTERCPsCfQled_nxBDIN40U7x1hDX3CvVkMeLe4Pxg=w600" /></figure>
       
   </div>
   <div class="messages">
+    {
+      chatHistory.map((c, index) => {
+        if (nickname === c.nickname) {
+          return <div class="message message-personal">{c.content}</div>
+        } else {
+          return <div class="message new">{c.nickname}: {c.content}</div>
+        }
+        // return <div class="messages-content">{c.nickname}: {c.content}</div>
+      })
+    }
+    {/* <div class="messages-content">A: B</div> */}
     
-    <div class="messages-content"></div>
+    {/* <div class="message new">ASSD: Bsdfsd</div> */}
+    
   </div>
   <div class="message-box">
-    <textarea type="text" class="message-input" placeholder="Type message..."></textarea>
-    <button type="submit" class="message-submit">Send</button>
+    <textarea type="text" class="message-input" placeholder="Type message..." value={textValue} onChange={(event)=> setTextValue(event.target.value)}></textarea>
+    <button type="submit" class="message-submit" onClick={()=>{
+      axios.post(chatUrl, {
+        nickname:nickname, 
+        content: textValue,
+        timestamp: 0
+      }).then(()=>{
+        setTextValue('');
+      })
+
+    }}>Send</button>
   </div>
 
 </div>
