@@ -9,7 +9,7 @@ import '@babylonjs/loaders';
 import ScaledModelWithProgress from './ScaledModelWithProgress';
 
 import axios from 'axios';
-const chatUrl = 'http://3.113.24.30:3000/chat';
+const chatUrl = 'https://net-provider.herokuapp.com/chat';
 const nickname = `CRYPTO FUNK MANIAC - ${parseInt(Math.random()*10000)}`
 let box;
 const gltfPath = 'https://storage.opensea.io/files/e085da0987a623f329d9587723a12b8d.gltf';
