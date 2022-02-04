@@ -7,6 +7,7 @@ import "@babylonjs/loaders";
 
 import axios from "axios";
 import { Display3D } from "./components/Display3D";
+import { MapDisplayer } from "./components/2d/MapDisplayer";
 const chatUrl = "https://9718-3-113-24-30.ngrok.io/chat";
 const nickname = `CRYPTO FUNK MANIAC - ${parseInt(Math.random() * 10000)}`;
 let box;
@@ -69,7 +70,7 @@ function App() {
   const [textValue, setTextValue] = useState("");
   const [chatSecond, setChatSecond] = useState(M);
   const [chatHistory, setChatHistory] = useState([{ nickname: "MASTER", content: "HELLO" }]);
-
+  const [assetSwitch, setAssetSwitch] = useState(true);
   useEffect(() => {
     axios.get(chatUrl).then((value) => {
       setChatHistory(value.data);
@@ -88,7 +89,14 @@ function App() {
 
   return (
     <div>
-      <Display3D NFTUrls={NFTUrls} />
+      <button onClick={()=>{setAssetSwitch(!assetSwitch)}} style={{position:'absolute', marginTop:'20px', marginLeft:'20px'}}>SWITCH</button>
+      
+      <div style={{height: "100px"}}>
+        {/* <Display3D NFTUrls={NFTUrls} /> */}
+        { assetSwitch ?<MapDisplayer /> : <Display3D NFTUrls={NFTUrls} />}
+        
+      </div>
+      
       <div class="chat">
         <div class="chat-title">
           <h1>{nickname}</h1>
@@ -108,11 +116,9 @@ function App() {
                 </div>
               );
             }
-            // return <div class="messages-content">{c.nickname}: {c.content}</div>
+            
           })}
-          {/* <div class="messages-content">A: B</div> */}
-
-          {/* <div class="message new">ASSD: Bsdfsd</div> */}
+          
         </div>
         <div class="message-box">
           <textarea type="text" class="message-input" placeholder="Type message..." value={textValue} onChange={(event) => setTextValue(event.target.value)}></textarea>
@@ -141,3 +147,8 @@ function App() {
 }
 
 export default App;
+
+// return <div class="messages-content">{c.nickname}: {c.content}</div>
+
+{/* <div class="messages-content">A: B</div> */}
+          {/* <div class="message new">ASSD: Bsdfsd</div> */}
