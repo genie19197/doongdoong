@@ -70,7 +70,7 @@ function App() {
   const [textValue, setTextValue] = useState("");
   const [chatSecond, setChatSecond] = useState(M);
   const [chatHistory, setChatHistory] = useState([{ nickname: "MASTER", content: "HELLO" }]);
-  const [assetSwitch, setAssetSwitch] = useState(true);
+  const [assetSwitch, setAssetSwitch] = useState(false);
   useEffect(() => {
     axios.get(chatUrl).then((value) => {
       setChatHistory(value.data);
